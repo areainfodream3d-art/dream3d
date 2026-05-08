@@ -22,27 +22,9 @@ const enTranslations = {
   products: {
     tag: 'Showcase',
     title: 'Featured Productions',
-    subtitle: 'Explore a more complete catalog with filters, search, materials, and production technologies tailored to your project.',
     filters: { all: 'All', mech: 'Mechanical', design: 'Design', mini: 'Miniatures', arch: 'Architecture' },
     view: 'Details',
-    startFrom: 'From',
-    searchPlaceholder: 'Search by product, material, or tag...',
-    inStock: 'In stock',
-    techAll: 'All tech',
-    results: 'results',
-    reset: 'Reset filters',
-    onRequest: 'On request',
-    ready: 'Ready',
-    custom: 'Custom',
-    emptyTitle: 'No matching products',
-    emptyDesc: 'Try changing filters or search terms to explore more products.',
-    catalogCta: 'Request the full catalog',
-    sort: {
-      featured: 'Featured',
-      priceAsc: 'Price ↑',
-      priceDesc: 'Price ↓',
-      nameAsc: 'A-Z'
-    }
+    startFrom: 'From'
   },
   services: {
     tag: 'Our Offering',
@@ -132,27 +114,9 @@ const zhTranslations = {
   products: {
     tag: '展示',
     title: '精选作品',
-    subtitle: '通过搜索、筛选和材料/工艺标签，更快找到适合您项目的产品。',
     filters: { all: '全部', mech: '机械', design: '设计', mini: '微型', arch: '建筑' },
     view: '详情',
-    startFrom: '起价',
-    searchPlaceholder: '按产品、材料或标签搜索...',
-    inStock: '有库存',
-    techAll: '全部工艺',
-    results: '个结果',
-    reset: '重置筛选',
-    onRequest: '按需生产',
-    ready: '现货',
-    custom: '定制',
-    emptyTitle: '没有匹配的产品',
-    emptyDesc: '请尝试更改筛选条件或搜索词。',
-    catalogCta: '申请完整目录',
-    sort: {
-      featured: '精选',
-      priceAsc: '价格 ↑',
-      priceDesc: '价格 ↓',
-      nameAsc: 'A-Z'
-    }
+    startFrom: '起价'
   },
   services: {
     tag: '我们的服务',
@@ -324,27 +288,9 @@ export const translations: Record<string, any> = {
     products: {
       tag: 'Showcase',
       title: 'Realizzazioni in evidenza',
-      subtitle: 'Esplora un catalogo piu completo con ricerca, filtri, materiali e tecnologie adatte al tuo progetto.',
       filters: { all: 'Tutti', mech: 'Meccanica', design: 'Design', mini: 'Miniature', arch: 'Architettura' },
       view: 'Dettagli',
-      startFrom: 'Da',
-      searchPlaceholder: 'Cerca per prodotto, materiale o tag...',
-      inStock: 'Disponibili',
-      techAll: 'Tutte le tecnologie',
-      results: 'risultati',
-      reset: 'Reset filtri',
-      onRequest: 'Su richiesta',
-      ready: 'Pronto',
-      custom: 'Custom',
-      emptyTitle: 'Nessun prodotto trovato',
-      emptyDesc: 'Prova a cambiare filtri o termini di ricerca per vedere piu risultati.',
-      catalogCta: 'Richiedi il catalogo completo',
-      sort: {
-        featured: 'In evidenza',
-        priceAsc: 'Prezzo ↑',
-        priceDesc: 'Prezzo ↓',
-        nameAsc: 'A-Z'
-      }
+      startFrom: 'Da'
     },
     services: {
       tag: 'La nostra offerta',
