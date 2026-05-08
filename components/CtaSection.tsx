@@ -8,7 +8,7 @@ const CtaSection: React.FC<{ language: LanguageCode }> = ({ language }) => {
   const t = translations[language].cta;
 
   return (
-    <section className="py-24 bg-white dark:bg-background-dark transition-colors duration-300">
+    <section className="py-24 bg-white dark:bg-background-dark transition-colors duration-300" id="cta">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-primary rounded-[3rem] p-12 lg:p-24 relative overflow-hidden text-center shadow-2xl shadow-primary/20">
           <div className="absolute inset-0 opacity-10" style={{backgroundImage: "url('https://www.transparenttextures.com/patterns/cubes.png')"}}></div>
