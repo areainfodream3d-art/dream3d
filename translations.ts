@@ -24,7 +24,21 @@ const enTranslations = {
     title: 'Featured Productions',
     filters: { all: 'All', mech: 'Mechanical', design: 'Design', mini: 'Miniatures', arch: 'Architecture' },
     view: 'Details',
-    startFrom: 'From'
+    startFrom: 'From',
+    searchPlaceholder: 'Search products, materials or technologies...',
+    clearSearch: 'Clear search',
+    reset: 'Reset',
+    browseCatalog: 'Browse full catalog',
+    noResultsTitle: 'No products found',
+    noResultsDesc: 'Try a different search or change the active filters.',
+    results: (count: number) => `${count} result${count === 1 ? '' : 's'}`,
+    sort: {
+      featured: 'Featured',
+      priceAsc: 'Price low to high',
+      priceDesc: 'Price high to low',
+      titleAsc: 'Name A-Z',
+      titleDesc: 'Name Z-A'
+    }
   },
   services: {
     tag: 'Our Offering',
@@ -116,7 +130,21 @@ const zhTranslations = {
     title: '精选作品',
     filters: { all: '全部', mech: '机械', design: '设计', mini: '微型', arch: '建筑' },
     view: '详情',
-    startFrom: '起价'
+    startFrom: '起价',
+    searchPlaceholder: '搜索产品、材料或工艺...',
+    clearSearch: '清除搜索',
+    reset: '重置',
+    browseCatalog: '浏览完整目录',
+    noResultsTitle: '未找到产品',
+    noResultsDesc: '请尝试其他搜索词或更改筛选条件。',
+    results: (count: number) => `${count} 个结果`,
+    sort: {
+      featured: '精选',
+      priceAsc: '价格从低到高',
+      priceDesc: '价格从高到低',
+      titleAsc: '名称 A-Z',
+      titleDesc: '名称 Z-A'
+    }
   },
   services: {
     tag: '我们的服务',
@@ -290,7 +318,21 @@ export const translations: Record<string, any> = {
       title: 'Realizzazioni in evidenza',
       filters: { all: 'Tutti', mech: 'Meccanica', design: 'Design', mini: 'Miniature', arch: 'Architettura' },
       view: 'Dettagli',
-      startFrom: 'Da'
+      startFrom: 'Da',
+      searchPlaceholder: 'Cerca prodotti, materiali o tecnologie...',
+      clearSearch: 'Cancella ricerca',
+      reset: 'Reset',
+      browseCatalog: 'Sfoglia il catalogo completo',
+      noResultsTitle: 'Nessun prodotto trovato',
+      noResultsDesc: 'Prova una ricerca diversa o cambia i filtri attivi.',
+      results: (count: number) => `${count} risultat${count === 1 ? 'o' : 'i'}`,
+      sort: {
+        featured: 'In evidenza',
+        priceAsc: 'Prezzo crescente',
+        priceDesc: 'Prezzo decrescente',
+        titleAsc: 'Nome A-Z',
+        titleDesc: 'Nome Z-A'
+      }
     },
     services: {
       tag: 'La nostra offerta',
