@@ -111,7 +111,7 @@ export default function EngineeringSolutions() {
         <h2 className="text-2xl font-bold text-center mb-4 text-neon-orange mt-20">Portfolio Design Macchina</h2>
         <div className="flex flex-col md:flex-row items-center gap-6 bg-dark-surface rounded-xl p-6 border border-white/10 shadow-lg">
           <iframe
-            src="/macchina-design-portfolio.pdf"
+            src="/macchina%20design%20portfolio/macchina-design-portfolio.pdf"
             title="Portfolio Design Macchina"
             className="w-full md:w-1/2 h-80 rounded border border-white/10"
             loading="lazy"
@@ -122,7 +122,7 @@ export default function EngineeringSolutions() {
               Scopri alcuni progetti di design e ingegnerizzazione realizzati da Dream3D. Il PDF contiene immagini, descrizioni e dettagli tecnici delle nostre soluzioni.
             </p>
             <a
-              href="/macchina-design-portfolio.pdf"
+              href="/macchina%20design%20portfolio/macchina-design-portfolio.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-5 py-2 bg-neon-orange text-black font-bold rounded hover:bg-neon-fire transition-colors"
