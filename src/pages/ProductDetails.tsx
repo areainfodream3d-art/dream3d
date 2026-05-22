@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { isShopifyConfigured, shopify, fetchProductMedia } from '../lib/shopify';
+import { isShopifyConfigured, shopify, fetchProductMedia, normalizeShopifyAssetUrl } from '../lib/shopify';
 import { Button } from '../components/ui/Button';
 import { ShoppingCart, ArrowLeft, Check, Box } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -116,7 +116,7 @@ export const ProductDetails = () => {
                                     || m.sources.find((s: any) => s.url && !s.url.includes('.usdz'));
                         
                         if (source) {
-                            const url = source.url;
+                            const url = normalizeShopifyAssetUrl(source.url);
                             const lowerUrl = url.toLowerCase();
                             const filename = source.filename || url.split('/').pop() || '';
                             let label = `Modello ${variantsFound.length + 1}`;
