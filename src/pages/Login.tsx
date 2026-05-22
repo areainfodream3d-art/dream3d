@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import Printer3DAnimation from '../components/ui/Printer3DAnimation';
 import { useNavigate } from 'react-router-dom';
 import { useAuthRedirect } from '../hooks/useAuthRedirect';
 
 export default function Login() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
@@ -41,16 +43,16 @@ export default function Login() {
     setError('');
     setSuccess('');
     if (!isSupabaseConfigured) {
-      setError('Login non disponibile: Supabase non configurato.');
+      setError(t('auth.login_unavailable_error'));
       return;
     }
     if (!validateEmail(email)) {
-      setError('Inserisci una email valida.');
+      setError(t('auth.invalid_email'));
       emailRef.current?.focus();
       return;
     }
     if (!validatePassword(password)) {
-      setError('La password deve essere di almeno 6 caratteri.');
+      setError(t('auth.min_password'));
       passwordRef.current?.focus();
       return;
     }
@@ -61,7 +63,7 @@ export default function Login() {
         const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: redirectTo } });
         if (error) throw error;
         setIsRegister(false);
-        setSuccess('Registrazione completata! Controlla la tua email per confermare.');
+        setSuccess(t('auth.register_success'));
       } else {
         // LOGIN
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -69,17 +71,17 @@ export default function Login() {
           password
         });
         if (error) throw error;
-        if (!data.session) throw new Error('Login fallito.');
+        if (!data.session) throw new Error(t('auth.login_failed'));
         if (remember) {
           localStorage.setItem('supabase-persist-session', 'true');
         } else {
           localStorage.removeItem('supabase-persist-session');
         }
-        setSuccess('Login effettuato! Reindirizzamento...');
+        setSuccess(t('auth.login_success'));
         setTimeout(() => navigate('/user'), 800);
       }
     } catch (err) {
-      setError(err.message || 'Errore di autenticazione');
+      setError(err.message || t('auth.auth_error'));
     } finally {
       setLoading(false);
     }
@@ -92,11 +94,11 @@ export default function Login() {
     setSuccess('');
     setResetSent(false);
     if (!isSupabaseConfigured) {
-      setError('Recupero password non disponibile: Supabase non configurato.');
+      setError(t('auth.recovery_unavailable'));
       return;
     }
     if (!validateEmail(email)) {
-      setError('Inserisci una email valida per il recupero.');
+      setError(t('auth.invalid_email_recovery'));
       emailRef.current?.focus();
       return;
     }
@@ -105,9 +107,9 @@ export default function Login() {
       const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${redirectTo}?type=recovery` });
       if (error) throw error;
       setResetSent(true);
-      setSuccess('Email di recupero inviata! Controlla la tua casella di posta.');
+      setSuccess(t('auth.recovery_sent'));
     } catch (err) {
-      setError(err.message || 'Errore durante il recupero password');
+      setError(err.message || t('auth.recovery_error'));
     } finally {
       setLoading(false);
     }
@@ -118,17 +120,17 @@ export default function Login() {
       <Printer3DAnimation />
       <div className="bg-dark-surface rounded-xl shadow-lg p-8 w-full max-w-md border border-white/10 mt-4" aria-live="polite">
         <h1 className="text-3xl font-bold text-center mb-6 text-neon-orange">
-          {isRegister ? 'Registrati' : showReset ? 'Recupera password' : 'Accedi'}
+          {isRegister ? t('auth.register_title') : showReset ? t('auth.recover_title') : t('auth.login_title')}
         </h1>
         {!isSupabaseConfigured && (
           <div className="text-amber-400 text-sm text-center mb-4">
-            Area login momentaneamente non disponibile.
+            {t('auth.login_unavailable')}
           </div>
         )}
         {!showReset ? (
-          <form onSubmit={handleSubmit} className="space-y-6" autoComplete="on" aria-label={isRegister ? 'Registrazione' : 'Login'}>
+          <form onSubmit={handleSubmit} className="space-y-6" autoComplete="on" aria-label={isRegister ? t('auth.form_register') : t('auth.form_login')}>
             <div>
-              <label className="block text-gray-200 mb-1" htmlFor="email">Email</label>
+              <label className="block text-gray-200 mb-1" htmlFor="email">{t('commission.email')}</label>
               <input
                 id="email"
                 ref={emailRef}
@@ -145,7 +147,7 @@ export default function Login() {
             </div>
             {!isRegister && (
               <div>
-                <label className="block text-gray-200 mb-1" htmlFor="password">Password</label>
+                <label className="block text-gray-200 mb-1" htmlFor="password">{t('auth.password_label')}</label>
                 <input
                   id="password"
                   ref={passwordRef}
@@ -163,7 +165,7 @@ export default function Login() {
             )}
             {isRegister && (
               <div>
-                <label className="block text-gray-200 mb-1" htmlFor="password">Password</label>
+                <label className="block text-gray-200 mb-1" htmlFor="password">{t('auth.password_label')}</label>
                 <input
                   id="password"
                   ref={passwordRef}
@@ -190,7 +192,7 @@ export default function Login() {
                     className="mr-2 accent-neon-orange"
                     disabled={loading}
                   />
-                  <label htmlFor="remember" className="text-gray-300">Ricorda accesso</label>
+                  <label htmlFor="remember" className="text-gray-300">{t('auth.remember_access')}</label>
                 </div>
                 <button
                   type="button"
@@ -198,7 +200,7 @@ export default function Login() {
                   onClick={() => { setShowReset(true); setError(''); setSuccess(''); }}
                   disabled={loading}
                 >
-                  Password dimenticata?
+                  {t('auth.forgot_password')}
                 </button>
               </div>
             )}
@@ -226,17 +228,17 @@ export default function Login() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                   </svg>
-                  <span>{isRegister ? 'Registrazione...' : 'Accesso...'}</span>
+                  <span>{isRegister ? t('auth.registering') : t('auth.logging_in')}</span>
                 </span>
               ) : (
-                (isRegister ? 'Registrati' : 'Accedi')
+                (isRegister ? t('auth.register_title') : t('auth.login_title'))
               )}
             </button>
           </form>
         ) : (
-          <form onSubmit={handleResetPassword} className="space-y-6" aria-label="Recupero password">
+          <form onSubmit={handleResetPassword} className="space-y-6" aria-label={t('auth.form_reset')}>
             <div>
-              <label className="block text-gray-200 mb-1" htmlFor="reset-email">Email</label>
+              <label className="block text-gray-200 mb-1" htmlFor="reset-email">{t('commission.email')}</label>
               <input
                 id="reset-email"
                 ref={emailRef}
@@ -263,7 +265,7 @@ export default function Login() {
                 <span>{success}</span>
               </div>
             )}
-            {resetSent && <div className="text-green-400 text-xs text-center">Se non trovi l'email controlla anche nello spam.</div>}
+            {resetSent && <div className="text-green-400 text-xs text-center">{t('auth.reset_hint_spam')}</div>}
             <button
               type="submit"
               className="w-full py-2 px-4 bg-neon-orange text-black font-bold rounded hover:bg-neon-fire transition-colors disabled:opacity-60 focus:ring-2 focus:ring-neon-orange focus:ring-offset-2"
@@ -276,10 +278,10 @@ export default function Login() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                   </svg>
-                  <span>Invio...</span>
+                  <span>{t('auth.sending_recovery')}</span>
                 </span>
               ) : (
-                'Invia link di recupero'
+                t('auth.send_recovery')
               )}
             </button>
             <button
@@ -288,7 +290,7 @@ export default function Login() {
               onClick={() => { setShowReset(false); setError(''); setSuccess(''); setResetSent(false); }}
               disabled={loading}
             >
-              Torna al login
+              {t('auth.back_to_login')}
             </button>
           </form>
         )}
@@ -296,9 +298,9 @@ export default function Login() {
           <button
             className="text-neon-orange hover:underline"
             onClick={() => { setIsRegister(r => !r); setError(''); setSuccess(''); setShowReset(false); setResetSent(false); }}
-            aria-label={isRegister ? 'Passa al login' : 'Passa alla registrazione'}
+            aria-label={isRegister ? t('auth.switch_to_login_aria') : t('auth.switch_to_register_aria')}
           >
-            {isRegister ? 'Hai già un account? Accedi' : 'Non hai un account? Registrati'}
+            {isRegister ? t('auth.switch_to_login') : t('auth.switch_to_register')}
           </button>
         </div>
       </div>

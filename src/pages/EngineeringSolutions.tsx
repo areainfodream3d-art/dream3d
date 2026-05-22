@@ -1,43 +1,27 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const sectors = [
-  { name: 'Alimenti e Bevande', icon: '🍞' },
-  { name: 'Acciaio', icon: '🔩' },
-  { name: 'Chimica', icon: '⚗️' },
-  { name: 'Imballaggi', icon: '📦' },
-  { name: 'Riciclaggio', icon: '♻️' },
-  { name: 'Agricoltura', icon: '🌾' },
+const sectorKeys = [
+  { key: 'food_beverage', icon: '🍞' },
+  { key: 'steel', icon: '🔩' },
+  { key: 'chemical', icon: '⚗️' },
+  { key: 'packaging', icon: '📦' },
+  { key: 'recycling', icon: '♻️' },
+  { key: 'agriculture', icon: '🌾' },
 ];
 
-const services = [
-  {
-    title: 'Progettazione Meccanica',
-    desc: 'Dall’idea al modello 3D, sviluppiamo soluzioni su misura per ogni esigenza industriale.'
-  },
-  {
-    title: 'Impianti Chiavi in Mano',
-    desc: 'Gestione completa del progetto: progettazione, realizzazione e avviamento di impianti industriali.'
-  },
-  {
-    title: 'Automazione Industriale',
-    desc: 'Soluzioni di automazione per aumentare efficienza, sicurezza e affidabilità dei processi.'
-  },
-  {
-    title: 'Macchine Speciali',
-    desc: 'Progettazione e costruzione di macchinari personalizzati per esigenze specifiche.'
-  },
-  {
-    title: 'Ricerca & Sviluppo',
-    desc: 'Innovazione continua per offrire tecnologie all’avanguardia e soluzioni uniche.'
-  },
-  {
-    title: 'Produzione & Fabbricazione',
-    desc: 'Dalla prototipazione rapida alla produzione in serie, con materiali di alta qualità.'
-  },
+const serviceKeys = [
+  'mechanical_design',
+  'turnkey_plants',
+  'industrial_automation',
+  'special_machines',
+  'rnd',
+  'manufacturing',
 ];
 
 
 export default function EngineeringSolutions() {
+  const { t } = useTranslation();
   // Preventivo form state
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -45,10 +29,28 @@ export default function EngineeringSolutions() {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
 
+  const services = useMemo(
+    () =>
+      serviceKeys.map((key) => ({
+        title: t(`engineering.services.${key}.title`),
+        desc: t(`engineering.services.${key}.desc`),
+      })),
+    [t]
+  );
+
+  const sectors = useMemo(
+    () =>
+      sectorKeys.map((sector) => ({
+        icon: sector.icon,
+        name: t(`engineering.sectors.${sector.key}`),
+      })),
+    [t]
+  );
+
   const handleSendContact = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactName.trim() || !contactEmail.trim() || !contactDesc.trim()) {
-      alert("Per favore compila tutti i campi.");
+      alert(t('commission.fill_all'));
       return;
     }
     setSending(true);
@@ -72,10 +74,10 @@ export default function EngineeringSolutions() {
         setContactEmail("");
         setContactDesc("");
       } else {
-        alert("Errore nell'invio. Riprova più tardi.");
+        alert(t('engineering.submit_error'));
       }
     } catch (error) {
-      alert("Errore di connessione.");
+      alert(t('commission.error_conn'));
     } finally {
       setSending(false);
     }
@@ -83,9 +85,9 @@ export default function EngineeringSolutions() {
 
   return (
     <section className="max-w-5xl mx-auto py-16 px-4">
-      <h1 className="text-4xl font-bold text-center mb-6 text-neon-orange">Soluzioni Ingegneristiche</h1>
+      <h1 className="text-4xl font-bold text-center mb-6 text-neon-orange">{t('engineering.title')}</h1>
       <p className="text-center text-lg text-gray-300 mb-12">
-        Dall’ideazione alla produzione, Dream3D offre servizi di ingegneria industriale, automazione e progettazione su misura per ogni settore.
+        {t('engineering.subtitle')}
       </p>
       <div className="grid md:grid-cols-3 gap-8 mb-16">
         {services.map((service) => (
@@ -95,7 +97,7 @@ export default function EngineeringSolutions() {
           </div>
         ))}
       </div>
-      <h2 className="text-2xl font-bold text-center mb-4 text-neon-orange">Settori Serviti</h2>
+      <h2 className="text-2xl font-bold text-center mb-4 text-neon-orange">{t('engineering.sectors_title')}</h2>
       <div className="flex flex-wrap justify-center gap-6 mb-16">
         {sectors.map((sector) => (
           <div key={sector.name} className="flex flex-col items-center bg-dark-surface rounded-lg p-4 w-36 border border-white/10">
@@ -108,18 +110,18 @@ export default function EngineeringSolutions() {
 
       {/* Portfolio PDF */}
       <div className="max-w-3xl mx-auto mb-16">
-        <h2 className="text-2xl font-bold text-center mb-4 text-neon-orange mt-20">Portfolio Design Macchina</h2>
+        <h2 className="text-2xl font-bold text-center mb-4 text-neon-orange mt-20">{t('engineering.portfolio_title')}</h2>
         <div className="flex flex-col md:flex-row items-center gap-6 bg-dark-surface rounded-xl p-6 border border-white/10 shadow-lg">
           <iframe
             src="/macchina%20design%20portfolio/macchina-design-portfolio.pdf"
-            title="Portfolio Design Macchina"
+            title={t('engineering.portfolio_title')}
             className="w-full md:w-1/2 h-80 rounded border border-white/10"
             loading="lazy"
           />
           <div className="flex-1 flex flex-col items-center md:items-start">
-            <h3 className="text-lg font-semibold text-neon-orange mb-2">Scarica o visualizza il portfolio completo</h3>
+            <h3 className="text-lg font-semibold text-neon-orange mb-2">{t('engineering.portfolio_heading')}</h3>
             <p className="text-gray-300 text-sm mb-4 text-center md:text-left">
-              Scopri alcuni progetti di design e ingegnerizzazione realizzati da Dream3D. Il PDF contiene immagini, descrizioni e dettagli tecnici delle nostre soluzioni.
+              {t('engineering.portfolio_desc')}
             </p>
             <a
               href="/macchina%20design%20portfolio/macchina-design-portfolio.pdf"
@@ -127,7 +129,7 @@ export default function EngineeringSolutions() {
               rel="noopener noreferrer"
               className="inline-block px-5 py-2 bg-neon-orange text-black font-bold rounded hover:bg-neon-fire transition-colors"
             >
-              Visualizza/Scarica PDF
+              {t('engineering.portfolio_button')}
             </a>
           </div>
         </div>
@@ -136,41 +138,41 @@ export default function EngineeringSolutions() {
       {/* Preventivo Section */}
       <div className="max-w-2xl mx-auto bg-dark-surface p-8 rounded-2xl border border-white/5 shadow-xl">
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 justify-center text-center text-neon-orange">
-          Richiedi un Preventivo
+          {t('commission.quote_title')}
         </h2>
         {sent ? (
-          <div className="text-green-500 text-center text-lg font-semibold py-8">Grazie! La tua richiesta è stata inviata.</div>
+          <div className="text-green-500 text-center text-lg font-semibold py-8">{t('engineering.form_success')}</div>
         ) : (
         <form onSubmit={handleSendContact} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Nome</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">{t('commission.name')}</label>
             <input 
               type="text" 
               value={contactName}
               onChange={(e) => setContactName(e.target.value)}
               className="w-full bg-dark-bg border border-white/10 rounded-lg px-4 py-2 text-white focus:border-neon-orange outline-none transition-colors" 
-              placeholder="Il tuo nome"
+              placeholder={t('commission.name_placeholder')}
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">{t('commission.email')}</label>
             <input 
               type="email" 
               value={contactEmail}
               onChange={(e) => setContactEmail(e.target.value)}
               className="w-full bg-dark-bg border border-white/10 rounded-lg px-4 py-2 text-white focus:border-neon-orange outline-none transition-colors" 
-              placeholder="tua@email.com"
+              placeholder={t('commission.email_placeholder')}
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Descrizione Progetto</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">{t('commission.desc')}</label>
             <textarea 
               value={contactDesc}
               onChange={(e) => setContactDesc(e.target.value)}
               className="w-full bg-dark-bg border border-white/10 rounded-lg px-4 py-2 text-white focus:border-neon-orange outline-none transition-colors h-32" 
-              placeholder="Descrivi cosa vorresti realizzare..."
+              placeholder={t('engineering.desc_placeholder')}
               required
             />
           </div>
@@ -179,7 +181,7 @@ export default function EngineeringSolutions() {
             className="w-full py-2 px-4 bg-neon-orange text-black font-bold rounded hover:bg-neon-fire transition-colors disabled:opacity-60"
             disabled={sending}
           >
-            {sending ? 'Invio in corso...' : 'Invia Richiesta'}
+            {sending ? t('commission.sending') : t('commission.send')}
           </button>
         </form>
         )}

@@ -13,8 +13,8 @@ export const Footer = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Dream3D - Stampa 3D Professionale',
-          text: 'Dai forma alle tue idee con Dream3D. Stampa 3D di alta qualità in PLA e Resina.',
+          title: t('footer.share_title'),
+          text: t('footer.share_text'),
           url: shareUrl,
         });
       } catch (error) {
@@ -23,7 +23,7 @@ export const Footer = () => {
     } else {
       // Fallback: copia negli appunti
       navigator.clipboard.writeText(shareUrl);
-      alert('Link copiato negli appunti!');
+      alert(t('footer.link_copied'));
     }
   };
 
@@ -85,7 +85,7 @@ export const Footer = () => {
               <ul className="text-gray-400 font-medium space-y-4">
                 <li className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-neon-orange flex-shrink-0" />
-                  <span>Treviso, Italia</span>
+                  <span>{t('footer.location')}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-neon-orange flex-shrink-0" />

@@ -1,18 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/Button';
 import { useShopifyCustomer } from '../hooks/useShopifyCustomer';
 import { fetchCustomerOrders, type ShopifyOrder } from '../lib/shopifyCustomer';
 
-function formatDate(iso: string) {
+function formatDate(iso: string, locale: string) {
   try {
-    return new Date(iso).toLocaleDateString('it-IT', { year: 'numeric', month: 'short', day: '2-digit' });
+    return new Date(iso).toLocaleDateString(locale, { year: 'numeric', month: 'short', day: '2-digit' });
   } catch {
     return iso;
   }
 }
 
 export default function Orders() {
+  const { t, i18n } = useTranslation();
   const { isShopifyConfigured, accessToken, customer, loading: authLoading, error: authError, refreshCustomer } = useShopifyCustomer();
   const [orders, setOrders] = useState<ShopifyOrder[]>([]);
   const [loading, setLoading] = useState(false);
@@ -36,13 +38,13 @@ export default function Orders() {
 
   const title = useMemo(() => {
     const name = customer?.firstName || customer?.email;
-    return name ? `I miei ordini (${name})` : 'I miei ordini';
-  }, [customer?.email, customer?.firstName]);
+    return name ? `${t('orders.my_orders')} (${name})` : t('orders.my_orders');
+  }, [customer?.email, customer?.firstName, t]);
 
   const openGuestStatusUrl = () => {
     const raw = guestStatusUrl.trim();
     if (!raw) {
-      setGuestUrlError('Inserisci il link dello stato ordine.');
+      setGuestUrlError(t('orders.guest_insert_link'));
       return;
     }
     try {
@@ -53,7 +55,7 @@ export default function Orders() {
       setGuestUrlError('');
       window.open(u.toString(), '_blank', 'noreferrer');
     } catch {
-      setGuestUrlError('Link non valido. Incolla un URL completo (https://...).');
+      setGuestUrlError(t('orders.guest_invalid_link'));
     }
   };
 
@@ -94,7 +96,7 @@ export default function Orders() {
       })
       .catch((e: any) => {
         if (aborted) return;
-        setError(e?.message || 'Impossibile caricare gli ordini.');
+        setError(e?.message || t('orders.load_error'));
       })
       .finally(() => {
         if (aborted) return;
@@ -110,8 +112,8 @@ export default function Orders() {
     return (
       <div className="pt-32 pb-20 container mx-auto px-4 min-h-screen">
         <div className="max-w-3xl mx-auto bg-dark-surface p-8 rounded-2xl border border-white/10 text-center">
-          <h1 className="text-2xl font-bold mb-3">Ordini non disponibili</h1>
-          <p className="text-gray-400">Shopify non è configurato correttamente.</p>
+          <h1 className="text-2xl font-bold mb-3">{t('orders.unavailable_title')}</h1>
+          <p className="text-gray-400">{t('orders.unavailable_desc')}</p>
         </div>
       </div>
     );
@@ -122,17 +124,17 @@ export default function Orders() {
       <div className="pt-32 pb-20 container mx-auto px-4 min-h-screen">
         <div className="max-w-3xl mx-auto space-y-6">
           <div className="bg-dark-surface p-8 rounded-2xl border border-white/10 text-center">
-            <h1 className="text-2xl font-bold mb-3">Accedi per vedere i tuoi ordini</h1>
-            <p className="text-gray-400 mb-6">La cronologia ordini completa è collegata all’account cliente Shopify.</p>
+            <h1 className="text-2xl font-bold mb-3">{t('orders.login_title')}</h1>
+            <p className="text-gray-400 mb-6">{t('orders.login_desc')}</p>
             <Link to="/account">
-              <Button size="lg">Vai al login</Button>
+              <Button size="lg">{t('orders.go_to_login')}</Button>
             </Link>
           </div>
 
           <div className="bg-dark-surface p-8 rounded-2xl border border-white/10">
-            <h2 className="text-xl font-bold text-center mb-2">Traccia un ordine senza account</h2>
+            <h2 className="text-xl font-bold text-center mb-2">{t('orders.guest_title')}</h2>
             <div className="text-gray-400 text-sm text-center mb-4">
-              Se hai acquistato come ospite, nella mail di conferma Shopify c’è un link “Stato ordine”. Incollalo qui per aprire tracking e dettagli.
+              {t('orders.guest_desc')}
             </div>
 
             {guestUrlError && <div className="text-red-400 text-sm text-center mb-3">{guestUrlError}</div>}
@@ -141,20 +143,20 @@ export default function Orders() {
               <input
                 type="url"
                 className="w-full px-4 py-2 rounded bg-dark-bg border border-white/10 text-white focus:outline-none focus:border-neon-orange"
-                placeholder="https://… (link stato ordine)"
+                placeholder={t('orders.guest_placeholder')}
                 value={guestStatusUrl}
                 onChange={(e) => setGuestStatusUrl(e.target.value)}
               />
-              <Button size="lg" onClick={openGuestStatusUrl}>Apri</Button>
+              <Button size="lg" onClick={openGuestStatusUrl}>{t('orders.open')}</Button>
             </div>
 
             {lastCheckoutWebUrl && (
               <div className="mt-6 border-t border-white/10 pt-4 text-center">
-                <div className="text-gray-300 text-sm font-bold mb-1">Ultimo checkout su questo dispositivo</div>
-                {lastCheckoutAt && <div className="text-gray-500 text-xs mb-3">{formatDate(lastCheckoutAt)}</div>}
+                <div className="text-gray-300 text-sm font-bold mb-1">{t('orders.last_checkout')}</div>
+                {lastCheckoutAt && <div className="text-gray-500 text-xs mb-3">{formatDate(lastCheckoutAt, i18n.language)}</div>}
                 <div className="flex flex-col md:flex-row justify-center gap-3">
-                  <Button variant="secondary" size="lg" onClick={openLastCheckout}>Apri ultimo checkout</Button>
-                  <Button variant="outline" size="lg" onClick={clearLastCheckout}>Rimuovi</Button>
+                  <Button variant="secondary" size="lg" onClick={openLastCheckout}>{t('orders.open_last_checkout')}</Button>
+                  <Button variant="outline" size="lg" onClick={clearLastCheckout}>{t('orders.remove')}</Button>
                 </div>
               </div>
             )}
@@ -174,12 +176,12 @@ export default function Orders() {
 
         {(authLoading || loading) ? (
           <div className="bg-dark-surface p-8 rounded-2xl border border-white/10 text-center text-gray-300">
-            Caricamento ordini...
+            {t('orders.loading')}
           </div>
         ) : orders.length === 0 ? (
           <div className="bg-dark-surface p-8 rounded-2xl border border-white/10 text-center">
-            <div className="text-gray-300 font-bold mb-2">Nessun ordine trovato</div>
-            <div className="text-gray-400 text-sm">Gli ordini appariranno qui dopo un acquisto completato.</div>
+            <div className="text-gray-300 font-bold mb-2">{t('orders.none_title')}</div>
+            <div className="text-gray-400 text-sm">{t('orders.none_desc')}</div>
           </div>
         ) : (
           <div className="space-y-4">
@@ -188,7 +190,7 @@ export default function Orders() {
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                   <div>
                     <div className="text-white font-bold text-lg">{o.name}</div>
-                    <div className="text-gray-400 text-sm">{formatDate(o.processedAt)}</div>
+                    <div className="text-gray-400 text-sm">{formatDate(o.processedAt, i18n.language)}</div>
                   </div>
                   <div className="text-right">
                     {o.currentTotalPrice && (
@@ -197,15 +199,15 @@ export default function Orders() {
                       </div>
                     )}
                     <div className="text-gray-400 text-sm">
-                      {o.financialStatus ? `Pagamento: ${o.financialStatus}` : null}
-                      {o.fulfillmentStatus ? ` • Spedizione: ${o.fulfillmentStatus}` : null}
+                      {o.financialStatus ? `${t('orders.payment_label')}: ${o.financialStatus}` : null}
+                      {o.fulfillmentStatus ? ` • ${t('orders.shipping_label')}: ${o.fulfillmentStatus}` : null}
                     </div>
                   </div>
                 </div>
 
                 {o.lineItems.length > 0 && (
                   <div className="mt-4 border-t border-white/10 pt-4">
-                    <div className="text-gray-300 text-sm font-bold mb-2">Articoli</div>
+                    <div className="text-gray-300 text-sm font-bold mb-2">{t('orders.items')}</div>
                     <div className="text-gray-400 text-sm space-y-1">
                       {o.lineItems.slice(0, 5).map((li, idx) => (
                         <div key={`${o.id}-${idx}`}>{li.quantity}× {li.title}</div>
@@ -223,7 +225,7 @@ export default function Orders() {
                       rel="noreferrer"
                       className="text-neon-orange hover:underline text-sm font-bold"
                     >
-                      Apri stato ordine / tracking
+                      {t('orders.open_status')}
                     </a>
                   </div>
                 )}

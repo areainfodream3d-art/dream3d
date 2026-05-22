@@ -19,7 +19,7 @@ export const Navbar = () => {
     { name: t('navbar.shop'), path: '/shop' },
     { name: t('navbar.orders'), path: '/ordini' },
     { name: t('navbar.commissions'), path: '/commissioni' },
-    { name: 'Soluzioni Ingegneristiche', path: '/soluzioni-ingegneristiche' },
+    { name: t('navbar.engineering'), path: '/soluzioni-ingegneristiche' },
     { name: t('navbar.about'), path: '/chi-siamo' },
   ];
 
@@ -107,7 +107,7 @@ export const Navbar = () => {
             type="button"
             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-400 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
           >
-            <span className="sr-only">Open main menu</span>
+            <span className="sr-only">{t('navbar.open_menu')}</span>
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
