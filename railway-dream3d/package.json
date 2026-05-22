@@ -1,0 +1,8 @@
+{
+  "name": "railway-dream3d-wrapper",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix .. install && npm --prefix .. run build",
+    "start": "npm --prefix .. run start"
+  }
+}
