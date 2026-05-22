@@ -21,7 +21,7 @@ const serviceKeys = [
 
 
 export default function EngineeringSolutions() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   // Preventivo form state
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -35,7 +35,7 @@ export default function EngineeringSolutions() {
         title: t(`engineering.services.${key}.title`),
         desc: t(`engineering.services.${key}.desc`),
       })),
-    [t]
+    [t, i18n.language]
   );
 
   const sectors = useMemo(
@@ -44,7 +44,7 @@ export default function EngineeringSolutions() {
         icon: sector.icon,
         name: t(`engineering.sectors.${sector.key}`),
       })),
-    [t]
+    [t, i18n.language]
   );
 
   const handleSendContact = async (e: React.FormEvent) => {

@@ -39,7 +39,7 @@ export default function Orders() {
   const title = useMemo(() => {
     const name = customer?.firstName || customer?.email;
     return name ? `${t('orders.my_orders')} (${name})` : t('orders.my_orders');
-  }, [customer?.email, customer?.firstName, t]);
+  }, [customer?.email, customer?.firstName, t, i18n.language]);
 
   const openGuestStatusUrl = () => {
     const raw = guestStatusUrl.trim();
